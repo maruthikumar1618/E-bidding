@@ -33,7 +33,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://e-bidding-1.onrender.com" ,
+    origin: process.env.FRONTEND_URL || "https://e-bidding-1.onrender.com",
     methods: ["GET", "POST"]
   }
 });
@@ -56,7 +56,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:8080",
+  origin: process.env.FRONTEND_URL || "https://e-bidding-1.onrender.com",
   credentials: true
 }));
 
@@ -96,7 +96,7 @@ app.use(errorHandler);
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:8080"}`);
+  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || "https://e-bidding-1.onrender.com"}`);
 });
 
 export { io };
