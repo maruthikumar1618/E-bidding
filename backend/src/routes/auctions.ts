@@ -37,7 +37,7 @@ router.get('/', optionalAuth, getAuctions);
 router.get('/:id', optionalAuth, getAuction);
 
 // Protected routes
-router.post('/', authenticateToken, upload.array('images', 5), validateCreateAuction, createAuction);
+router.post('/', authenticateToken, upload.array('images', 5), createAuction);
 router.put('/:id', authenticateToken, upload.array('images', 5), updateAuction);
 router.delete('/:id', authenticateToken, deleteAuction);
 router.get('/user/my-auctions', authenticateToken, getUserAuctions);

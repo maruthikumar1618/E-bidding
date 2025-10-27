@@ -8,11 +8,9 @@ const prisma = new PrismaClient();
 // Create auction
 export const createAuction = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
+    console.log('🔍 Creating auction with body:', req.body);
+    console.log('🔍 Files:', req.files);
+    
     const userId = (req as any).userId;
     const {
       title,
@@ -28,13 +26,26 @@ export const createAuction = async (req: Request, res: Response) => {
       min_bid_increment
     } = req.body;
 
+    // Validate required fields
+    if (!title || !description || !starting_price || !end_time || !category_id) {
+      return res.status(400).json({ 
+        message: 'Missing required fields: title, description, starting_price, end_time, category_id' 
+      });
+    }
+
     // Upload images if provided
     let image_urls: string[] = [];
-    if (req.files && Array.isArray(req.files)) {
-      const uploadPromises = req.files.map((file: any) => 
-        uploadToCloudinary(file.buffer, 'auctions')
-      );
-      image_urls = await Promise.all(uploadPromises);
+    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+      try {
+        const uploadPromises = req.files.map((file: any) => 
+          uploadToCloudinary(file.buffer, 'auctions')
+        );
+        image_urls = await Promise.all(uploadPromises);
+      } catch (imageError) {
+        console.error('Error uploading images to Cloudinary:', imageError);
+        // Continue without images if Cloudinary fails
+        image_urls = [];
+      }
     }
 
     const auction = await prisma.auction.create({
