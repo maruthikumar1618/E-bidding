@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  password      String
+  role          UserRole  @default(BIDDER)
+  is_verified   Boolean   @default(false)
+  rating        Float     @default(0)
+  total_ratings Int       @default(0)
+  avatar_url    String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  // Relations
+  auctions      Auction[]
+  bids          Bid[]
+  watchlist     Watchlist[]
+  messages_sent Message[] @relation("MessageSender")
+  messages_received Message[] @relation("MessageReceiver")
+  notifications Notification[]
+  reviews_given Review[] @relation("ReviewGiver")
+  reviews_received Review[] @relation("ReviewReceiver")
+  payments_sent Payment[] @relation("PaymentBuyer")
+  payments_received Payment[] @relation("PaymentSeller")
+
+  @@map("users")
+}
+
+model Category {
+  id          String @id @default(cuid())
+  name        String @unique
+  slug        String @unique
+  description String?
+  icon        String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  auctions    Auction[]
+
+  @@map("categories")
+}
+
+model Auction {
+  id                String        @id @default(cuid())
+  title             String
+  description       String
+  starting_price    Float
+  current_price     Float
+  reserve_price     Float?
+  status            AuctionStatus @default(DRAFT)
+  start_time        DateTime?
+  end_time          DateTime
+  image_urls        String[]
+  condition         String?
+  location          String?
+  shipping_cost     Float         @default(0)
+  auto_extend       Boolean       @default(false)
+  min_bid_increment Float         @default(10)
+  total_bids        Int           @default(0)
+  views             Int           @default(0)
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  // Foreign Keys
+  seller_id         String
+  category_id       String
+
+  // Relations
+  seller            User          @relation(fields: [seller_id], references: [id], onDelete: Cascade)
+  category          Category      @relation(fields: [category_id], references: [id])
+  bids              Bid[]
+  watchlist         Watchlist[]
+  messages          Message[]
+  notifications     Notification[]
+  reviews           Review[]
+  payments          Payment[]
+
+  @@map("auctions")
+}
+
+model Bid {
+  id         String   @id @default(cuid())
+  amount     Float
+  is_winning Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  // Foreign Keys
+  auction_id String
+  user_id    String
+
+  // Relations
+  auction    Auction  @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("bids")
+}
+
+model Watchlist {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+
+  // Foreign Keys
+  auction_id String
+  user_id    String
+
+  // Relations
+  auction    Auction  @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([auction_id, user_id])
+  @@map("watchlist")
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  content    String
+  is_read    Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  // Foreign Keys
+  auction_id String
+  sender_id  String
+  receiver_id String
+
+  // Relations
+  auction    Auction  @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+  sender     User      @relation("MessageSender", fields: [sender_id], references: [id], onDelete: Cascade)
+  receiver   User      @relation("MessageReceiver", fields: [receiver_id], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  type       NotificationType
+  title      String
+  message    String
+  data       Json?
+  is_read    Boolean          @default(false)
+  created_at DateTime         @default(now())
+
+  // Foreign Keys
+  user_id    String
+  auction_id String?
+
+  // Relations
+  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  auction    Auction?          @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int      // 1-5 stars
+  comment    String?
+  created_at DateTime @default(now())
+
+  // Foreign Keys
+  auction_id String
+  giver_id   String
+  receiver_id String
+
+  // Relations
+  auction    Auction  @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+  giver      User      @relation("ReviewGiver", fields: [giver_id], references: [id], onDelete: Cascade)
+  receiver   User      @relation("ReviewReceiver", fields: [receiver_id], references: [id], onDelete: Cascade)
+
+  @@unique([auction_id, giver_id])
+  @@map("reviews")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  payment_method String?
+  transaction_id String?
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  // Foreign Keys
+  auction_id    String
+  buyer_id      String
+  seller_id     String
+
+  // Relations
+  auction       Auction       @relation(fields: [auction_id], references: [id], onDelete: Cascade)
+  buyer         User          @relation("PaymentBuyer", fields: [buyer_id], references: [id], onDelete: Cascade)
+  seller        User          @relation("PaymentSeller", fields: [seller_id], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// Enums
+enum UserRole {
+  SELLER
+  BIDDER
+  ADMIN
+}
+
+enum AuctionStatus {
+  DRAFT
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum NotificationType {
+  BID_PLACED
+  BID_OUTBID
+  AUCTION_WON
+  AUCTION_ENDING
+  AUCTION_CANCELLED
+  MESSAGE_RECEIVED
+  PAYMENT_RECEIVED
+  REVIEW_RECEIVED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}

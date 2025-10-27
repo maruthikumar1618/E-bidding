@@ -1,0 +1,356 @@
+{
+  "designSystem": {
+    "name": "BeliBeli E-commerce Platform",
+    "version": "1.0",
+    "overview": "Modern e-commerce marketplace with clean, minimal aesthetic focusing on product discovery and conversion",
+    
+    "colorPalette": {
+      "primary": {
+        "black": "#000000",
+        "description": "Used for primary text, icons, and key UI elements"
+      },
+      "secondary": {
+        "white": "#FFFFFF",
+        "description": "Background color, card backgrounds, contrast elements"
+      },
+      "accent": {
+        "lightGray": "#F5F5F5",
+        "mediumGray": "#E0E0E0",
+        "darkGray": "#4A4A4A",
+        "description": "Used for cards, borders, secondary text"
+      },
+      "semantic": {
+        "error": "#DC2626",
+        "success": "#16A34A",
+        "sale": "#EF4444",
+        "discount": "#F97316"
+      }
+    },
+
+    "typography": {
+      "fontFamily": {
+        "primary": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "fallback": "system-ui, sans-serif"
+      },
+      "scale": {
+        "hero": {
+          "size": "48px",
+          "weight": "700",
+          "lineHeight": "1.2",
+          "usage": "Main banner headlines"
+        },
+        "h1": {
+          "size": "36px",
+          "weight": "700",
+          "lineHeight": "1.3",
+          "usage": "Section headers"
+        },
+        "h2": {
+          "size": "24px",
+          "weight": "600",
+          "lineHeight": "1.4",
+          "usage": "Subsection headers"
+        },
+        "h3": {
+          "size": "18px",
+          "weight": "600",
+          "lineHeight": "1.5",
+          "usage": "Card titles, product names"
+        },
+        "body": {
+          "size": "14px",
+          "weight": "400",
+          "lineHeight": "1.6",
+          "usage": "General content, descriptions"
+        },
+        "small": {
+          "size": "12px",
+          "weight": "400",
+          "lineHeight": "1.5",
+          "usage": "Meta information, labels"
+        },
+        "caption": {
+          "size": "10px",
+          "weight": "400",
+          "lineHeight": "1.4",
+          "usage": "Tiny labels, badges"
+        }
+      }
+    },
+
+    "spacing": {
+      "scale": "8px base unit",
+      "values": {
+        "xs": "4px",
+        "sm": "8px",
+        "md": "16px",
+        "lg": "24px",
+        "xl": "32px",
+        "2xl": "48px",
+        "3xl": "64px"
+      },
+      "sectionSpacing": "48-64px between major sections",
+      "cardPadding": "16px internal padding",
+      "gridGap": "16-24px between grid items"
+    },
+
+    "layout": {
+      "containerWidth": {
+        "max": "1200px",
+        "padding": "24px horizontal"
+      },
+      "grid": {
+        "columns": {
+          "mobile": 1,
+          "tablet": 2,
+          "desktop": 4,
+          "wide": 4
+        },
+        "gap": "16-24px",
+        "responsive": true
+      },
+      "breakpoints": {
+        "mobile": "320px - 767px",
+        "tablet": "768px - 1023px",
+        "desktop": "1024px - 1439px",
+        "wide": "1440px+"
+      }
+    },
+
+    "components": {
+      "navigationBar": {
+        "height": "64px",
+        "backgroundColor": "white",
+        "position": "sticky top",
+        "elements": [
+          "Logo (left aligned)",
+          "Category dropdown",
+          "Search bar (expandable, centered)",
+          "Icon buttons (notifications, cart)",
+          "Auth buttons (Sign Up, Login - right aligned)"
+        ],
+        "shadow": "0 1px 3px rgba(0,0,0,0.1)"
+      },
+
+      "heroBanner": {
+        "height": "400-500px",
+        "layout": "Split content: text left, product images right",
+        "backgroundColor": "light gray gradient",
+        "elements": [
+          "Hashtag/category label",
+          "Large headline (50% emphasized)",
+          "Subtitle",
+          "Pagination dots"
+        ],
+        "textAlignment": "left"
+      },
+
+      "categoryNav": {
+        "layout": "Horizontal scroll/grid",
+        "itemStyle": {
+          "display": "Icon with label below",
+          "iconSize": "48px",
+          "iconStyle": "Solid black on white/light background",
+          "spacing": "12px between icon and label",
+          "arrangement": "Evenly spaced with equal widths"
+        }
+      },
+
+      "flashSale": {
+        "style": "Prominent banner with countdown",
+        "elements": [
+          "Flash icon with label",
+          "Countdown timer (hours:minutes:seconds)",
+          "Navigation arrows"
+        ],
+        "timerStyle": "Bold numbers in circles with colored backgrounds"
+      },
+
+      "productCard": {
+        "structure": {
+          "imageContainer": {
+            "aspectRatio": "1:1",
+            "backgroundColor": "#F5F5F5",
+            "borderRadius": "8px",
+            "position": "relative"
+          },
+          "content": {
+            "padding": "12px 0",
+            "spacing": "4-8px between elements"
+          }
+        },
+        "elements": [
+          {
+            "name": "productImage",
+            "fit": "contain or cover",
+            "overlay": "Optional wishlist icon (top-right)"
+          },
+          {
+            "name": "productName",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "lines": "1-2 max"
+          },
+          {
+            "name": "rating",
+            "display": "Stars + count",
+            "color": "Gold stars, gray text"
+          },
+          {
+            "name": "pricing",
+            "layout": "Current price (bold, large) + strikethrough original (if sale)",
+            "priceSize": "16-18px",
+            "priceWeight": "600",
+            "oldPriceStyle": "strikethrough, gray, smaller"
+          },
+          {
+            "name": "badge",
+            "position": "Bottom of image",
+            "types": ["In 10 Sale", "Sale percentage", "Best Seller"],
+            "style": "Small pill badges, colored backgrounds"
+          }
+        ],
+        "hover": {
+          "elevation": "Subtle shadow increase",
+          "transform": "Optional slight scale (1.02)"
+        }
+      },
+
+      "sectionHeader": {
+        "layout": "Title + filter/tab buttons",
+        "titleSize": "24-28px",
+        "titleWeight": "600",
+        "filters": {
+          "style": "Pill buttons",
+          "activeState": "Black background, white text",
+          "inactiveState": "White background, black text, border"
+        }
+      },
+
+      "storeCard": {
+        "structure": {
+          "layout": "Logo + name + product grid",
+          "border": "1px solid light gray",
+          "borderRadius": "12px",
+          "padding": "20px"
+        },
+        "elements": [
+          "Store icon/logo (top, centered or left)",
+          "Store name",
+          "Tagline/description",
+          "Mini product grid (3-4 items with images and prices)"
+        ]
+      },
+
+      "footer": {
+        "backgroundColor": "Dark gray (#2D2D2D)",
+        "textColor": "White/light gray",
+        "structure": {
+          "sections": [
+            "Brand section (logo + tagline)",
+            "Navigation columns (About, Buy, Sell, Guide)",
+            "Social media icons"
+          ],
+          "layout": "Multi-column grid",
+          "bottomBar": "Copyright info, centered"
+        }
+      },
+
+      "buttons": {
+        "primary": {
+          "backgroundColor": "black",
+          "color": "white",
+          "padding": "10px 24px",
+          "borderRadius": "4px",
+          "fontWeight": "500"
+        },
+        "secondary": {
+          "backgroundColor": "white",
+          "color": "black",
+          "border": "1px solid black",
+          "padding": "10px 24px",
+          "borderRadius": "4px"
+        },
+        "icon": {
+          "size": "40px",
+          "shape": "circle or square with rounded corners",
+          "backgroundColor": "transparent or light gray"
+        }
+      },
+
+      "icons": {
+        "style": "Simple, line-based or solid",
+        "size": "20-24px for UI, 40-48px for categories",
+        "color": "Black primary, gray secondary"
+      }
+    },
+
+    "designPrinciples": {
+      "whitespace": "Generous use of negative space for breathing room",
+      "hierarchy": "Clear visual hierarchy through size, weight, and spacing",
+      "consistency": "Repeated patterns for cards, grids, and navigation",
+      "accessibility": "High contrast ratios, clear touch targets (44px min)",
+      "responsive": "Mobile-first approach with fluid grids",
+      "imagery": "Clean product photos on neutral backgrounds",
+      "gridAlignment": "Everything aligns to 8px grid system"
+    },
+
+    "interactionPatterns": {
+      "navigation": {
+        "sticky": "Header remains visible on scroll",
+        "categoryScroll": "Horizontal scrollable category navigation",
+        "breadcrumbs": "Optional for deep navigation"
+      },
+      "productDiscovery": {
+        "filters": "Tab-based or dropdown filters",
+        "sorting": "Implicit through section organization",
+        "search": "Prominent search bar with autocomplete"
+      },
+      "cards": {
+        "hover": "Subtle elevation change",
+        "click": "Navigate to product detail",
+        "wishlist": "Toggle icon overlay on image"
+      },
+      "carousel": {
+        "navigation": "Arrow buttons + pagination dots",
+        "autoplay": "Optional for hero banners",
+        "swipe": "Touch-enabled on mobile"
+      }
+    },
+
+    "contentStrategy": {
+      "productNames": "Clear, descriptive titles",
+      "pricing": "Prominent display with sale indicators",
+      "urgency": "Flash sale timers, limited stock badges",
+      "socialProof": "Ratings, review counts, 'Best Seller' tags",
+      "categorization": "Icon + text for clarity",
+      "callsToAction": "Clear, action-oriented language"
+    },
+
+    "technicalConsiderations": {
+      "performance": {
+        "imageLazyLoading": true,
+        "infiniteScroll": "Optional for product listings",
+        "caching": "Aggressive caching for images and API responses"
+      },
+      "seo": {
+        "semanticHTML": true,
+        "structuredData": "Product schema markup",
+        "metaTags": "Dynamic per page"
+      },
+      "frameworks": {
+        "suggested": ["React", "Next.js", "Vue", "Tailwind CSS"],
+        "patterns": "Component-based architecture"
+      }
+    },
+
+    "implementationNotes": {
+      "cardGrids": "Use CSS Grid with auto-fit/auto-fill for responsive columns",
+      "imageOptimization": "Use srcset for responsive images, WebP format",
+      "animations": "Subtle, performant transitions (transform and opacity only)",
+      "stateManagement": "Track wishlist, cart, filters in global state",
+      "apiStructure": "RESTful or GraphQL for product data, pagination support",
+      "accessibility": "ARIA labels for icons, keyboard navigation support, focus states"
+    }
+  }
+}
