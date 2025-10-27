@@ -33,7 +33,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:8080",
+    origin: "https://e-bidding-1.onrender.com" ,
     methods: ["GET", "POST"]
   }
 });
