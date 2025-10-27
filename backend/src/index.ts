@@ -31,9 +31,15 @@ dotenv.config();
 
 const app = express();
 const server = createServer(app);
+const allowedOrigins = [
+  "https://e-bidding-1.onrender.com",
+  "http://localhost:8083",
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
+].filter((origin): origin is string => typeof origin === 'string');
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "https://e-bidding-1.onrender.com",
+    origin: allowedOrigins,
     methods: ["GET", "POST"]
   }
 });
@@ -56,7 +62,22 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "https://e-bidding-1.onrender.com",
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://e-bidding-1.onrender.com",
+      "http://localhost:8083",
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+    
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 

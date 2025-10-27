@@ -3,6 +3,11 @@ import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
+// Debug: Log the API URL being used
+console.log('🔗 API Base URL:', API_BASE_URL);
+console.log('🔗 VITE_API_URL env:', import.meta.env.VITE_API_URL);
+console.log('🔗 All env vars:', import.meta.env);
+
 // API client with authentication
 class ApiClient {
   private baseURL: string;
